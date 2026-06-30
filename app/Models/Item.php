@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Item extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'description',
+        'sku',
+        'stock_quantity',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'stock_quantity' => 'integer',
+        'is_active' => 'boolean',
+    ];
+
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function isInStock(): bool
+    {
+        return $this->stock_quantity > 0;
+    }
+}

@@ -7,6 +7,7 @@ use App\Livewire\Auth\Register;
 use App\Livewire\Auth\Login;
 use App\Livewire\Admin\Items\Manager as ItemManager;
 use App\Livewire\Admin\Items\StockMonitor;
+use App\Livewire\Catalog\Index as CatalogIndex;
 
 Route::view('/', 'landing')->name('home');
 
@@ -38,5 +39,5 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 // Shared: any authenticated user (catalog is viewable by both roles per the FRD)
 Route::middleware(['auth'])->group(function () {
-    Route::view('/catalog', 'landing')->name('catalog');
+    Route::get('/catalog', CatalogIndex::class)->name('catalog');
 });

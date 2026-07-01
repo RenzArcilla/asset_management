@@ -19,7 +19,7 @@
 
     {{-- Hero --}}
     <main class="flex-grow">
-        <x-landing-header>
+        <x-hero>
             <x-slot name="badge">
                 <span class="mr-2 flex h-2 w-2 rounded-full bg-indigo-600 animate-pulse"></span>
                 Inventory & Request Management, Simplified
@@ -52,7 +52,7 @@
                     </a>
                 @endguest
             </x-slot>
-        </x-landing-header>
+        </x-hero>
 
         {{-- Feature Grid --}}
         <section class="max-w-6xl mx-auto px-6 pb-32">

@@ -21,6 +21,13 @@
             class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-600/20 transition-all duration-300 hover:bg-slate-700 hover:shadow-lg hover:-translate-y-0.5">
               Go to Dashboard
           </a>
+          <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit"
+                    class="inline-flex items-center rounded-lg bg-gray-100 px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-200">
+                Log Out
+            </button>
+        </form>
       @else
 				<a href="{{ route('login') }}" wire:navigate
 				   class="text-sm font-semibold text-gray-600 transition hover:text-indigo-600">

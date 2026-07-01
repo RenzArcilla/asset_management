@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Auth\Register;
 use App\Livewire\Auth\Login;
+use App\Livewire\Admin\Items\Manager as ItemManager;
 
 Route::view('/', 'landing')->name('home');
 
@@ -28,7 +29,7 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
 // Admin-only routes
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::view('/admin/dashboard', 'landing')->name('admin.dashboard');
-    // TODO: replace with real admin dashboard component
+    Route::get('/admin/items', ItemManager::class)->name('admin.items');
 });
 
 // Shared: any authenticated user (catalog is viewable by both roles per the FRD)

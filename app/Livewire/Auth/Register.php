@@ -36,22 +36,24 @@ class Register extends Component
     {
         $validated = $this->validate();
 
-        // Module A: First user created is Admin. All subsequent registrations default to Customer.
-        $role = User::query()->count() === 0 ? 'admin' : 'customer';
-
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role' => $role,
         ]);
+
+        // Module A: First registered user becomes Admin.
+        // All subsequent registrations default to Customer.
+        $user->assignRole(
+            User::query()->count() === 1 ? 'admin' : 'customer'
+        );
 
         event(new Registered($user));
 
         Auth::login($user);
 
         $this->redirect(
-            $user->role === 'admin' ? route('admin.dashboard') : route('dashboard'),
+            $user->hasRole('admin') ? route('admin.dashboard') : route('dashboard'),
             navigate: true
         );
     }

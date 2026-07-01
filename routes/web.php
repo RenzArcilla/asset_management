@@ -9,6 +9,7 @@ use App\Livewire\Admin\Items\Manager as ItemManager;
 use App\Livewire\Admin\Items\StockMonitor;
 use App\Livewire\Admin\Orders\Queue as OrderQueue;
 use App\Livewire\Catalog\Index as CatalogIndex;
+use App\Livewire\Orders\Tracker as OrderTracker;
 
 Route::view('/', 'landing')->name('home');
 
@@ -25,8 +26,7 @@ Route::post('/logout', function (Request $request) {
 
 // Customer-only routes
 Route::middleware(['auth', 'role:customer'])->group(function () {
-    Route::view('/dashboard', 'landing')->name('dashboard');
-    // TODO: replace with real customer dashboard component
+    Route::get('/dashboard', OrderTracker::class)->name('dashboard');
 });
 
 // Admin-only routes

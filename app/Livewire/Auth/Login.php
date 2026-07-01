@@ -53,7 +53,7 @@ class Login extends Component
         $user = Auth::user();
 
         $this->redirect(
-            $user->hasRole('admin') ? route('admin.dashboard') : route('dashboard'),
+            $user->hasRole('admin') ? route('admin.items') : route('catalog'),
             navigate: true
         );
     }

@@ -53,7 +53,7 @@ class Register extends Component
         Auth::login($user);
 
         $this->redirect(
-            $user->hasRole('admin') ? route('admin.dashboard') : route('dashboard'),
+            $user->hasRole('admin') ? route('admin.items') : route('catalog'),
             navigate: true
         );
     }

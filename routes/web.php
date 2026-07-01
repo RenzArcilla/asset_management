@@ -26,14 +26,14 @@ Route::post('/logout', function (Request $request) {
 
 // Customer-only routes
 Route::middleware(['auth', 'role:customer'])->group(function () {
-    Route::get('/dashboard', OrderTracker::class)->name('dashboard');
+    Route::get('/my-requests', OrderTracker::class)->name('dashboard');
+    // NOTE: route *name* kept as 'dashboard' since OrderTracker is referenced
+    // by that name in the sidebar and elsewhere. URL path changed to
+    // /my-requests to accurately reflect what the page actually is.
 });
 
 // Admin-only routes
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::view('/admin/dashboard', 'landing')->name('admin.dashboard');
-    // TODO: replace with real admin dashboard component
-
     Route::get('/admin/items', ItemManager::class)->name('admin.items');
     Route::get('/admin/items/stock', StockMonitor::class)->name('admin.items.stock');
     Route::get('/admin/orders', OrderQueue::class)->name('admin.orders');

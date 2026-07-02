@@ -136,6 +136,22 @@
                     </svg>
                     <span x-show="!collapsed" x-cloak class="truncate">Request Queue</span>
                 </a>
+
+                <p x-show="!collapsed" x-cloak class="px-3 pt-4 pb-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">Audit</p>
+
+                <a
+                    href="{{ route('admin.logs') }}"
+                    wire:navigate
+                    @click="mobileOpen = false"
+                    title="Activity Log"
+                    class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition
+                        {{ request()->routeIs('admin.logs') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}"
+                >
+                    <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                    <span x-show="!collapsed" x-cloak class="truncate">Activity Log</span>
+                </a>
             @else
                 <p x-show="!collapsed" x-cloak class="px-3 pt-2 pb-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">Menu</p>
 

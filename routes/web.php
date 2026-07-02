@@ -7,6 +7,7 @@ use App\Livewire\Auth\Register;
 use App\Livewire\Auth\Login;
 use App\Livewire\Admin\Items\Manager as ItemManager;
 use App\Livewire\Admin\Items\StockMonitor;
+use App\Livewire\Admin\Logs\Index as ActivityLogIndex;
 use App\Livewire\Admin\Orders\Queue as OrderQueue;
 use App\Livewire\Catalog\Index as CatalogIndex;
 use App\Livewire\Orders\Tracker as OrderTracker;
@@ -37,6 +38,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/items', ItemManager::class)->name('admin.items');
     Route::get('/admin/items/stock', StockMonitor::class)->name('admin.items.stock');
     Route::get('/admin/orders', OrderQueue::class)->name('admin.orders');
+    Route::get('/admin/logs', ActivityLogIndex::class)->name('admin.logs');
 });
 
 // Shared: any authenticated user (catalog is viewable by both roles per the FRD)

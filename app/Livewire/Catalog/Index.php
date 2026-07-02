@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Catalog;
 
+use App\Models\ActivityLog;
 use App\Models\Item;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -15,6 +16,7 @@ class Index extends Component
     use WithPagination;
 
     public string $search = '';
+
     public string $stockFilter = 'all'; // 'all' | 'in_stock' | 'out_of_stock'
 
     // Cart: [item_id => quantity], session-persisted so it survives navigation/pagination
@@ -164,6 +166,16 @@ class Index extends Component
                     'quantity' => $quantity,
                 ]);
             }
+
+            ActivityLog::record('order.submitted', $order, [
+                'items' => collect($this->cart)->map(function ($quantity, $itemId) use ($items) {
+                    return [
+                        'item_id' => $itemId,
+                        'item_name' => $items->get($itemId)?->name,
+                        'quantity' => $quantity,
+                    ];
+                })->values()->all(),
+            ]);
         });
 
         $this->cart = [];

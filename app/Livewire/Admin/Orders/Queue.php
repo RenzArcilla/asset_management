@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Orders;
 
+use App\Models\ActivityLog;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -58,8 +59,19 @@ class Queue extends Component
         }
 
         DB::transaction(function () use ($order) {
+            $deductions = [];
+
             foreach ($order->orderItems as $orderItem) {
+                $stockBefore = $orderItem->item->stock_quantity;
                 $orderItem->item->decrement('stock_quantity', $orderItem->quantity);
+
+                $deductions[] = [
+                    'item_id' => $orderItem->item_id,
+                    'item_name' => $orderItem->item->name,
+                    'quantity_deducted' => $orderItem->quantity,
+                    'stock_before' => $stockBefore,
+                    'stock_after' => $stockBefore - $orderItem->quantity,
+                ];
             }
 
             $order->update([
@@ -68,8 +80,9 @@ class Queue extends Component
                 'reviewed_at' => now(),
             ]);
 
-            // TODO(Module D): log approval — order id, admin id, items and
-            // quantities deducted, previous/new stock per item.
+            ActivityLog::record('order.approved', $order, [
+                'deductions' => $deductions,
+            ]);
         });
 
         $this->viewingOrderId = null;
@@ -105,7 +118,9 @@ class Queue extends Component
             'reviewed_at' => now(),
         ]);
 
-        // TODO(Module D): log rejection — order id, admin id, reason.
+        ActivityLog::record('order.rejected', $order, [
+            'reason' => $this->rejectReason ?: null,
+        ]);
 
         $this->showRejectModal = false;
         $this->viewingOrderId = null;

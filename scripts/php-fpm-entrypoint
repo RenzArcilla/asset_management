@@ -1,0 +1,45 @@
+#!/bin/bash
+set -e
+
+main() {
+    if [ "$IS_WORKER" = "true" ]; then
+        exec "$@"
+    else
+        wait_for_db
+        prepare_storage
+        run_migrations
+        optimize_app
+        run_server "$@"
+    fi
+}
+
+prepare_storage() {
+    mkdir -p storage/framework/cache/data \
+             storage/framework/sessions \
+             storage/framework/views
+
+    php artisan storage:link --force || true
+}
+
+wait_for_db() {
+    echo "Waiting for DB to be ready"
+    until php artisan db:show >/dev/null 2>&1; do
+        sleep 1
+    done
+    echo "DB is ready"
+}
+
+run_migrations() {
+    php artisan migrate --force
+}
+
+optimize_app() {
+    php artisan optimize:clear
+    php artisan optimize
+}
+
+run_server() {
+    exec /usr/local/bin/docker-php-entrypoint "$@"
+}
+
+main "$@"

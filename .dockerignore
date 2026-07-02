@@ -1,0 +1,68 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Dependencies (installed fresh in the container)
+/vendor
+/node_modules
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+docker-compose.override.yml
+
+# Laravel storage/cache/logs
+/storage/*.key
+/storage/app/*
+!/storage/app/public
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/logs/*
+!storage/framework/cache/.gitignore
+!storage/framework/sessions/.gitignore
+!storage/framework/testing/.gitignore
+!storage/framework/views/.gitignore
+!storage/logs/.gitignore
+bootstrap/cache/*.php
+
+# Build artifacts
+/public/hot
+/public/storage
+/public/build
+npm-debug.log
+yarn-error.log
+
+# Testing
+/tests
+/.phpunit.result.cache
+phpunit.xml
+
+# IDE / editor
+.idea
+.vscode
+*.swp
+*.swo
+.DS_Store
+
+# Docker-related
+Dockerfile
+docker-compose.yml
+docker-compose.*.yml
+.dockerignore
+
+# Docs
+README.md
+CHANGELOG.md
+LICENSE
+
+# CI/CD
+.github
+.gitlab-ci.yml
+
+# Misc
+*.log
+.editorconfig

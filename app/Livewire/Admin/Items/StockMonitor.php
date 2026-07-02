@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Items;
 
+use App\Models\ActivityLog;
 use App\Models\Item;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -83,9 +84,13 @@ class StockMonitor extends Component
 
         $item->update(['stock_quantity' => $newStock]);
 
-        // TODO(Module D): log this adjustment to activity_logs once the
-        // Logger system is built — capture item id, admin id, previous/new
-        // stock values, adjustment type, and reason.
+        ActivityLog::record('item.stock_adjusted', $item, [
+            'before' => ['stock_quantity' => $previousStock],
+            'after' => ['stock_quantity' => $newStock],
+            'adjustment_type' => $this->adjustmentType,
+            'amount' => $this->adjustmentAmount,
+            'reason' => $this->reason ?: null,
+        ]);
 
         $this->dispatch(
             'stock-adjusted',

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Items;
 
+use App\Models\ActivityLog;
 use App\Models\Item;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -78,11 +79,22 @@ class Manager extends Component
 
         if ($this->isEditing) {
             $item = Item::findOrFail($this->editingItemId);
+            $before = $item->only(array_keys($validated));
+
             $item->update($validated);
+
+            ActivityLog::record('item.updated', $item, [
+                'before' => $before,
+                'after' => $validated,
+            ]);
 
             $this->dispatch('item-saved', message: 'Item updated successfully.');
         } else {
-            Item::create($validated);
+            $item = Item::create($validated);
+
+            ActivityLog::record('item.created', $item, [
+                'after' => $validated,
+            ]);
 
             $this->dispatch('item-saved', message: 'Item created successfully.');
         }
@@ -103,7 +115,13 @@ class Manager extends Component
     public function delete(): void
     {
         if ($this->confirmingDeleteId) {
-            Item::findOrFail($this->confirmingDeleteId)->delete();
+            $item = Item::findOrFail($this->confirmingDeleteId);
+
+            ActivityLog::record('item.deleted', $item, [
+                'before' => $item->only(['name', 'description', 'sku', 'stock_quantity', 'is_active']),
+            ]);
+
+            $item->delete();
             $this->confirmingDeleteId = null;
 
             $this->dispatch('item-saved', message: 'Item deleted.');
